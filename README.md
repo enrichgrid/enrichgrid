@@ -5,7 +5,7 @@
 <h1 align="center">EnrichGrid</h1>
 
 <p align="center">
-  <b>LinkedIn person, company and school data through one REST API.</b><br>
+  <b>LinkedIn profile &amp; company scraper API: person, company and school data as JSON.</b><br>
   Pay only for profiles that are found. 50 free credits, no card.
 </p>
 
@@ -13,7 +13,8 @@
   <a href="https://enrichgrid.com/?ref=github">Website</a> ·
   <a href="https://enrichgrid.com/api-docs?ref=github">API docs</a> ·
   <a href="https://enrichgrid.com/mcp-server?ref=github">MCP server</a> ·
-  <a href="https://enrichgrid.com/chrome-extension?ref=github">Chrome extension</a> ·
+  <a href="https://chromewebstore.google.com/detail/camfalbgbfimllhmdncpjmnaabidceci">Chrome extension</a> ·
+  <a href="https://pypi.org/project/enrichgrid/">Python SDK</a> ·
   <a href="https://www.postman.com/enrichgrid-api/enrichgrid-api">Postman</a>
 </p>
 
@@ -28,6 +29,7 @@
 | **People search** | By job title, current or past company, country, city, company size, tenure, school |
 | **Bulk** | Upload Excel / CSV with up to 10,000 LinkedIn URLs, download it enriched |
 | **AI agents** | MCP server for Claude, Cursor and other MCP clients |
+| **On LinkedIn** | Chrome extension: the profile or company you are viewing, decision makers, leads to CSV |
 
 Not found = not charged. Repeat lookups within 30 days are instant.
 
@@ -39,18 +41,30 @@ curl -X POST https://enrichgrid.com/v1/enrich/person \
   -d '{"identifier": "https://www.linkedin.com/in/williamhgates"}'
 ```
 
-```python
-import requests
+```bash
+pip install enrichgrid
+```
 
-r = requests.post(
-    "https://enrichgrid.com/v1/enrich/person",
-    headers={"x-api-key": "YOUR_API_KEY"},
-    json={"identifier": "https://www.linkedin.com/in/williamhgates"},
-)
-print(r.json()["profile"]["current_title"])
+```python
+from enrichgrid import Client
+
+eg = Client("YOUR_API_KEY")  # or set ENRICHGRID_KEY
+lookup = eg.person("https://www.linkedin.com/in/williamhgates")
+print(lookup["profile"]["current_title"])
 ```
 
 Get a key: [enrichgrid.com/signup](https://enrichgrid.com/signup?ref=github)
+
+### Libraries and integrations
+
+| | |
+|---|---|
+| [enrichgrid-python](https://github.com/enrichgrid/enrichgrid-python) | Python SDK and CLI: `pip install enrichgrid`, then `enrichgrid csv leads.csv` enriches a CSV file |
+| [proxycurl-adapter](https://github.com/enrichgrid/proxycurl-adapter) | Drop-in for code written for Proxycurl: returns Proxycurl-shaped profiles |
+| [n8n-nodes-enrichgrid](https://github.com/enrichgrid/n8n-nodes-enrichgrid) | n8n community node, plus [ready-made workflows](https://enrichgrid.com/integrations/n8n?ref=github) |
+| [Chrome extension](https://chromewebstore.google.com/detail/camfalbgbfimllhmdncpjmnaabidceci) | Profile & company data on the LinkedIn page you are viewing, leads to CSV |
+| [Apify Actor](https://apify.com/enrichgrid/linkedin-profile-scraper) | LinkedIn profile scraper on Apify, no cookies |
+| [Postman](https://www.postman.com/enrichgrid-api/enrichgrid-api) | Every endpoint as a ready collection |
 
 ### Use with AI agents (MCP)
 
